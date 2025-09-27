@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Click to Earn — Example</title>
+  <style>
+    body{font-family:Helvetica,Arial,sans-serif;background:#f7fafc;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
+    .card{background:white;padding:30px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.08);max-width:420px;text-align:center}
+    h1{font-size:22px;margin:0 0 12px}
+    p{color:#555;margin:0 0 20px}
+    .btn{display:inline-block;padding:14px 20px;border-radius:10px;background:#0b74de;color:white;text-decoration:none;font-weight:600;cursor:pointer}
+    .note{font-size:13px;color:#888;margin-top:16px}
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Click to Earn</h1>
+    <p>নীচের বাটনে ক্লিক করলেই একটি ছোট বিজ্ঞাপন/অফার দেখানো হবে — দেখার পরে তোমাকে লক্ষ্য পেজে নিয়ে যাওয়া হবে।</p>
+
+    <!-- Target link: এখানে যেই পেজে পাঠাতে চাও সেটি দাও -->
+    <a id="targetLink" href="https://depositfiles.com/examplefile" class="btn" target="_blank">Click to Earn</a>
+
+    <div id="adblockWarn" class="note hidden">
+      তুমি যদি কোনো AdBlock চালাচ্ছো তবে অনুগ্রহ করে সেটি বন্ধ করে দেখো — নাহলে লকার কাজ নাও করতে পারে।
+    </div>
+    <div class="note">Note: Use ethically. Check network TOS before using incentivized traffic.</div>
+  </div>
+
+  <!-- OUO configuration: তোমার token এখানে set করো -->
+  <script>
+    // === OUO CONFIG ===
+    // ouo_token: তোমার OUO publisher token/ID এখানে বসাও
+    var ouo_token = 'Z2o8j5sE'; // <-- এটা বদলে দাও তোমার টোকেনে
+    // domains: যেসব ডোমেইনের লিংকে ক্লিক হলে locker কাজ করবে সেগুলো দাও
+    var domains = ['depositfiles.com', 'turbobit.net'];
+  </script>
+
+  <!-- OUO full page script (CDN) -->
+  <script src="//cdn.ouo.io/js/full-page-script.js"></script>
+
+  <script>
+    // সহজ টেস্টিং: detect adblock
+    function detectAdblock(cb){
+      var test = document.createElement('div');
+      test.innerHTML = '&nbsp;'; test.className = 'adsbox';
+      document.body.appendChild(test);
+      window.setTimeout(function(){
+        var blocked = (test.offsetHeight === 0);
+        document.body.removeChild(test);
+        cb(blocked);
+      }, 50);
+    }
+    detectAdblock(function(blocked){
+      if(blocked){
+        document.getElementById('adblockWarn').classList.remove('hidden');
+      }
+    });
+
+    // Optional: যদি তুমি চান, ক্লিক ইভেন্টে কিছু analytics চালাতে পারো
+    document.getElementById('targetLink').addEventListener('click', function(e){
+      // note: OUO script সাধারণত স্বয়ংক্রিয়ভাবে লক করে যদি target link match করে 'domains' array
+      // এখানে আমরা কেবল একটি console log রাখলাম
+      console.log('User clicked Click-to-Earn button at', new Date().toISOString());
+    });
+  </script>
+
+</body>
+</html>
